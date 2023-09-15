@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Encription app 🔑</title>
+	</head>
+	<body>
+		<h1>Encription app</h1>
+		<form action="/encript" method="post">
+			<label for="name">Name</label>
+			<input type="text" name="name" placeholder="Name goes here" />
+			<label for="lastname"></label>
+			<input type="text" name="lastname" placeholder="lastname" />
+			<label for="email"></label>
+			<input type="email" name="email" placeholder="email" />
+			<label for="password"></label>
+			<input type="password" name="password" placeholder="password" />
+			<button type="submit">Lets go!</button>
+		</form>
+		<button type="button" onclick="handleGetDataClick()">Get Data</button>
+	</body>
+	<script>
+		const handleGetDataClick = async () => {
+			const data = await getData();
+			createTable(data);
+		};
+
+		const getData = async () => {
+			let response = await fetch("/data");
+			return await response.json();
+		};
+
+		const createTable = (data) => {
+			const headers = Object.keys(data[0]);
+			const table = document.createElement("table");
+			const headerContainer = document.createElement("tr");
+			headers.forEach((header) => {
+				const tableHeader = document.createElement("th");
+				tableHeader.appendChild(document.createTextNode(header));
+				headerContainer.appendChild(tableHeader);
+			});
+			table.appendChild(headerContainer);
+			data.forEach((row) => {
+				const tableRow = document.createElement("tr");
+				Object.values(row).forEach((value) => {
+					const tableCell = document.createElement("td");
+					tableCell.appendChild(document.createTextNode(value));
+					tableRow.appendChild(tableCell);
+				});
+				table.appendChild(tableRow);
+			});
+			document.querySelector("body").appendChild(table);
+		};
+	</script>
+</html>
